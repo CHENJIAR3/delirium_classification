@@ -1,0 +1,11 @@
+name: delirium
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pytorch=1.12.1
+  - torchvision=0.13.1
+  - opencv=4.5.5
+  - numpy=1.21.6
+  - cudatoolkit=11.3 
