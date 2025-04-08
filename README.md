@@ -6,12 +6,12 @@ Automated Pediatric Delirium Recognition via Deep Learning-Powered Video Analysi
 First author: Jiarong Chen&nbsp;
 </h3>
 
-![Uploading image.png…]()
 
 ### Updates
 - [ ] Paper (Waiting for its publication, which included detailed information)
-- [x] The training, application algorithm
+- [x] main function
 - [x] The models
+- [x] The experimental setting 
 - [ ] Pretrained weights
 ### Contributions
 - [x] This study introduced some pretrained weights for the pediatric delirium recognition task. This study developed a hybrid deep learning architecture integrating pretrained models and finetuned classifier, achieving a accuracy of 0.8718 on hold-out inter-patient test sets.
