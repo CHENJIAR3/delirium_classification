@@ -13,27 +13,46 @@ from torchvision.models.video import (mc3_18,MC3_18_Weights,
                                       r3d_18, R3D_18_Weights,
                                       mvit_v1_b,MViT_V1_B_Weights,
                                       mvit_v2_s,MViT_V2_S_Weights,
+                                      s3d,S3D_Weights,
                                       r2plus1d_18,R2Plus1D_18_Weights,
                                       swin3d_b,Swin3D_B_Weights,
                                       swin3d_s,Swin3D_S_Weights,
                                       swin3d_t,Swin3D_T_Weights)
 class VideoDataset(Dataset):
-    def __init__(self, data_dir, transform=None, num_frames=100, mode='fixed', step=10):
+    def __init__(self, data_dir, args):
         self.data_dir = data_dir
-        self.transform = transform
-        if transform == None:
+        self.transform = args.transform
+        self.rotate_flag = args.rotate_flag
+        self.crop_flag = args.crop_flag
+        # if self.transform == None:
+            # "mc3_18","mvit_v1","mvit_v2", "r2+",
+            #                    "resnet", "s3d",
+            # "swin_b", "swin_s", "swin_t"
+        if args.model_type == "mc3_18":
             self.transform = MC3_18_Weights.DEFAULT.transforms()
-        # self.transform = transforms.Compose([
-        #     transforms.Resize(256),
-        #     transforms.CenterCrop(224),
-        #     transforms.ToTensor(),
-        #     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        # ])
-        self.num_frames = num_frames
-        self.mode = mode
-        self.step = step
+        if args.model_type == "resnet":
+            self.transform = R3D_18_Weights.DEFAULT.transforms()
+        if args.model_type == "mvit_v1":
+            self.transform = MViT_V1_B_Weights.DEFAULT.transforms()
+        if args.model_type == "mvit_v2":
+            self.transform = MViT_V2_S_Weights.DEFAULT.transforms()
+        if args.model_type == "r2+":
+            self.transform = R2Plus1D_18_Weights.DEFAULT.transforms()
+        if args.model_type == "s3d":
+            self.transform = S3D_Weights.DEFAULT.transforms()
+        if args.model_type == "swin_b":
+            self.transform = Swin3D_B_Weights.DEFAULT.transforms()
+        if args.model_type == "swin_s":
+            self.transform = Swin3D_S_Weights.DEFAULT.transforms()
+        if args.model_type == "swin_t":
+            self.transform = Swin3D_T_Weights.DEFAULT.transforms()
+
+        self.num_frames = args.num_frames
+        self.mode = args.mode
+        self.step = args.step
         self.classes = sorted(os.listdir(data_dir))
         self.class_to_idx = {cls: idx for idx, cls in enumerate(self.classes)}
+        print(self.class_to_idx)
         self.video_list = []
 
         for cls in self.classes:
@@ -51,7 +70,7 @@ class VideoDataset(Dataset):
                     cap = cv2.VideoCapture(video_path)
                     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
                     cap.release()
-                    starts = list(range(0, total_frames - num_frames + 1, self.step))
+                    starts = list(range(0, total_frames - self.num_frames + 1, self.step))
                     if starts:
                         for start in starts:
                             self.video_list.append((video_path, start, self.class_to_idx[cls]))
@@ -72,18 +91,18 @@ class VideoDataset(Dataset):
             frames = self.load_complete_video(video_path, total_frames)
         elif self.mode == 'sliding':
             video_path, start_frame, label = self.video_list[idx]
+
             frames = self.load_sliding_frames(video_path, start_frame)
+            # if self.rotate_img:
+            #     print("start")
         else:
             raise ValueError(f"Unsupported mode: {self.mode}")
 
         # if self.transform:
 
-        # frames = np.transpose(frames, (3, 0, 1, 2))  # (T, H, W, C) -> (C, T, H, W)
         frames = np.transpose(frames, (0, 3, 1, 2))  # (T, H, W, C) -> (T, C,  H, W)
-        # print(np.min(frames),np.max(frames))
         frames = torch.from_numpy(frames).float()/255.0
         frames = self.transform(frames)
-        # print(torch.mean(frames),torch.std(frames))
         label = torch.tensor(label).long()
         return frames, label
     def transform_frame(self,frame):
@@ -107,7 +126,6 @@ class VideoDataset(Dataset):
         if w<h:
             # 计算图像的中心点
             center = (w // 2, h // 2)
-
             # 获取旋转矩阵
             M = cv2.getRotationMatrix2D(center, angle, 1.0)
 
@@ -117,6 +135,16 @@ class VideoDataset(Dataset):
             return rotated
         else:
             return image
+
+    def random_crop(self,image, crop_ratio=0.8):
+        """随机裁剪保留核心区域"""
+        h, w = image.shape[:2]
+        new_h, new_w = int(h * crop_ratio), int(w * crop_ratio)
+        y = np.random.randint(0, h - new_h)
+        x = np.random.randint(0, w - new_w)
+        return image[y:y + new_h, x:x + new_w]
+        # else:
+        #     return image
 
     def load_fixed_frames(self, video_path):
         cap = cv2.VideoCapture(video_path)
@@ -167,7 +195,7 @@ class VideoDataset(Dataset):
         frames = np.stack(frames, axis=0)
         return frames
 
-    def load_sliding_frames(self, video_path, start_frame):
+    def load_sliding_frames(self, video_path, start_frame,isrotate=False):
         cap = cv2.VideoCapture(video_path)
         cap.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
         frames = []
@@ -176,9 +204,6 @@ class VideoDataset(Dataset):
             if ret:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 frame = self.rotate_image(frame)
-                # frame = self.transform_frame(frame)
-                # frame = cv2.resize(frame, (224, 224))
-                # frame = torch.from_numpy(frame).float() / 255.0  # uint8 to float
                 frames.append(frame)
             else:
                 if frames:
@@ -225,7 +250,7 @@ def show_image(videopath):
 if __name__ == "__main__":
     videopaths = glob.glob("../data/*/*.mp4")
     show_image(videopaths[0])
-    # dataset = VideoDataset("../data", num_frames=100, mode='sliding', step=10)
+    dataset = VideoDataset("../data", num_frames=100, mode='sliding', step=10)
     #
     # dataset = VideoDataset("../data", num_frames=100, mode='fixed', step=10)
     # dataloader = torch.utils.data.DataLoader(dataset, batch_size=4, shuffle=True, num_workers=4)
