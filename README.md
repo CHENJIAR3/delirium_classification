@@ -13,6 +13,8 @@ First author: Jiarong Chen&nbsp;
 - [x] The models
 - [x] The experimental setting 
 - [ ] Pretrained weights
+
+![image](https://github.com/CHENJIAR3/delirium_classification/blob/master/imgs/fig1_v2.png)
 ### Contributions
 - [x] This study introduced some pretrained weights for the pediatric delirium recognition task. This study developed a hybrid deep learning architecture integrating pretrained models and finetuned classifier, achieving a accuracy of 0.8718 on hold-out inter-patient test sets.
 - [x] The trained model was deployed on secured medical servers with a clinician-accessible interface, and the source code will be made publicly available upon publication.
