@@ -36,14 +36,14 @@ if __name__ == '__main__':
 
         args.model_type = model_type
 
-        model = VideoNet3D(args)
-        model = model.to(args.device)
         for exp in ["no_pretrained"]:
             if exp == "no_pretrained": args.pretrained = False;args.frozen = False
             if exp == "frozen": args.pretrained = True;args.frozen = True
             if exp == "main": args.pretrained = True;args.frozen = False
 
             if args.trainflag:
+                model = VideoNet3D(args)
+                model = model.to(args.device)
                 val_acc,best_val_loss,epoch_loss = model_train(model,args,data_dir="./dataset")
                 best_train_loss = np.round(np.min(epoch_loss),2)
             model = VideoNet3D(args)
