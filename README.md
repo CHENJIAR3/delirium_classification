@@ -28,7 +28,7 @@ If you find this project is useful, please cite it.
 ```
 
 ### Future work
-1. The application are used in clinical validation.
+1. The application and clinical validation.
 
 ### Acknowledgements
 **If you have any question, please contact me, I will try my best to help you.**
