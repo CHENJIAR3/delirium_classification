@@ -32,5 +32,5 @@ If you find this project is useful, please cite it.
 2. Building a multi-source, large-scale, multi-modal and real-world dataset.
 
 ### Acknowledgements
-**If you have any question, please contact me, I will try my best to help you.**
+**If you have any question, or want the developed application, please contact me, I will try my best to help you.**
 **Contacting me at iarong.chen@sjtu.edu.cn**
