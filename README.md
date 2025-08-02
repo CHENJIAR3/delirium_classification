@@ -33,4 +33,4 @@ If you find this project is useful, please cite it.
 
 ### Acknowledgements
 **If you have any question, or want the developed application, please contact me, I will try my best to help you.**
-**Contacting me at iarong.chen@sjtu.edu.cn**
+**Contacting me at jiarong.chen@sjtu.edu.cn**
