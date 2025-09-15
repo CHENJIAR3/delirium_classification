@@ -12,7 +12,7 @@ First author: Jiarong Chen&nbsp;
 - [x] main function
 - [x] The models
 - [x] The experimental setting 
-- [x] Pretrained weights
+- [x] Pretrained weights (https://pan.sjtu.edu.cn/web/share/eca6ae8f734335ab16347c0cf9c5bc81, code: 1g6v)
 
 ![image](https://github.com/CHENJIAR3/delirium_classification/blob/master/imgs/fig1_v2.png)
 ### Contributions
