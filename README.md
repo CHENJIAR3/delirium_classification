@@ -36,6 +36,7 @@ If you find this project is useful, please cite it.
   pages={1-12},
   keywords={Videos;Medical diagnostic imaging;Pediatrics;Hospitals;Brain modeling;Classification algorithms;Training;Artificial intelligence;Accuracy;Real-time systems;Digital Medicine;Pediatric Delirium;Deep Learning;Pretrained Models;Video Analysis},
   doi={10.1109/JBHI.2025.3604448}}
+```
 
 ### Future work
 1. The application and clinical validation.
