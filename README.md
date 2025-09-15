@@ -8,11 +8,11 @@ First author: Jiarong Chen&nbsp;
 
 
 ### Updates
-- [ ] Paper (Waiting for its publication, which included detailed information)
+- [x] Paper (https://ieeexplore.ieee.org/document/11145800)
 - [x] main function
 - [x] The models
 - [x] The experimental setting 
-- [ ] Pretrained weights
+- [x] Pretrained weights
 
 ![image](https://github.com/CHENJIAR3/delirium_classification/blob/master/imgs/fig1_v2.png)
 ### Contributions
@@ -26,6 +26,16 @@ First author: Jiarong Chen&nbsp;
 ### Citation
 If you find this project is useful, please cite it.
 ```
+@ARTICLE{chen2025auto,
+  author={Chen, Jiarong and Xia, Suqin and Shi, Wenqi and Gong, Yemin and Huang, Yali and Gu, Lixiang and Lin, Xiaoyu and Chen, Haibao and Wang, Guoxing and Chen, Cheng and Zhao, Liebin and Luo, Wenyi},
+  journal={IEEE Journal of Biomedical and Health Informatics}, 
+  title={Automated Pediatric Delirium Recognition via Deep Learning-Powered Video Analysis}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={1-12},
+  keywords={Videos;Medical diagnostic imaging;Pediatrics;Hospitals;Brain modeling;Classification algorithms;Training;Artificial intelligence;Accuracy;Real-time systems;Digital Medicine;Pediatric Delirium;Deep Learning;Pretrained Models;Video Analysis},
+  doi={10.1109/JBHI.2025.3604448}}
 
 ### Future work
 1. The application and clinical validation.
